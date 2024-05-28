@@ -297,10 +297,10 @@ if __name__=='__main__':
     X,y,le_pid,le_org,vectorizer = prepare_data(DATA)
     org_part_map=org2pid(DATA)
     # performs data split
-    X_train,X_test,y_train,y_test= split_data(X,y,test_size=0)
+    X_train,X_test,y_train,y_test= split_data(X,y)
     
     # trains the model 
-    model= train_model(X_train, y_train,  le_pid, le_org, vectorizer,org_part_map, save_model = True)
+    model= train_model(X_train, y_train,  le_pid, le_org, vectorizer,org_part_map, save_model = False)
 
     # Start timing for inference
     start_time = time.time()
