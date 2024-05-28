@@ -59,23 +59,23 @@ def run_prediction_with_negative_samples(file, use_pretrained):
 st.title("Part ID Prediction Tool")
 
 st.markdown("""
-### Choose Training Model:
-- **There are 2 Models to embed this information in the training process,Since not all organizations create/can create all 476 of these parts_ids. 
-- **NegativeSampling Mode: Augments the provided datasets by adding negative samples to help the model learn that not all part IDs 
+### Choose Training Method:
+- There are 2 Models to embed this information in the training process,Since not all organizations create/can create all 476 of these parts_ids. 
+- **NegativeSampling Mode**: Augments the provided datasets by adding negative samples to help the model learn that not all part IDs 
     get produced by each organization. This is done by introducing samples for part IDs that an organization 
     does not produce, while positive samples are given weights.
-- **FeatureFiltering Mode: Prediction across all categories and post-process the predictions to adjust based on the organization-part_id mapping. 
+- **FeatureFiltering Mode**: Prediction across all categories and post-process the predictions to adjust based on the organization-part_id mapping. 
 """)
 st.markdown("""
 ### Choose Prediction Mode:
 - **Use Pretrained Model**: This mode utilizes a model that was previously trained on the entire provided original dataset. This is for your unseen dataset of 5000 entries mentioned in the task description. after uploading your dataset click the "Predict" button.
 - **Train Model On the Fly**: This mode dynamically trains a new model using 80% of the provided original dataset that has to be uploaded and then uses the remaining 20% as test dataset to be predicted upon clicking on "Predict" button. This version does not take a new test dataset to be predicted.
-- **Note**: a random subset of the provided dataset is located in github https://github.com/Kimiaebra/ML_coding_challenge/blob/56e2b49dfc91a1534d34258897270b3693904146/saved_raw_test_data.csv merely for testing the functionality of the pretrained verion, ofcourse it's biased and trained model has seen the whole data
+- **Note**: a random subset of the provided dataset is located in github https://github.com/Kimiaebra/ML_coding_challenge/blob/56e2b49dfc91a1534d34258897270b3693904146/saved_raw_test_data.csv merely to test the functionality of the pretrained version, ofcourse it's biased and trained model has seen the whole data
 """)
 
 method = st.radio(
-    "Choose Prediction Method:",
-    ["Method A", "Method B"],
+    "Choose Training Method:",
+    ["Feature Filtering", "Negative Samples"],
 )
 
 mode = st.radio("Choose Prediction Mode:", ["Use Pretrained Model", "Train Model On the Fly"])
@@ -84,7 +84,7 @@ uploaded_file = st.file_uploader("Upload your CSV file", type=["csv"])
 if uploaded_file is not None:
     st.write("File uploaded successfully!")
     if st.button('Predict'):
-        if method == "Method A":
+        if method == "Feature Filtering":
             predictions,total_time, report = run_prediction_with_filtering_feature(uploaded_file, mode == "Use Pretrained Model")
         else:
             predictions,total_time, report = run_prediction_with_negative_samples(uploaded_file, mode == "Use Pretrained Model")
