@@ -5,16 +5,22 @@
 ### Requirements
 - Python 3.9
 
+```bash
 # Clone the repository
 git clone https://github.com/Kimiaebra/ML_coding_challenge.git
 cd ML_coding_challenge
+```
 
 # Create a Conda envirement
+```bash
 conda create -n [env_name] python=3.9
 conda activate [env_name]
+```
 
 # Install the required packages
+```bash
 pip install -r requirements.txt
+```
 
 # Running the Application
 
@@ -22,6 +28,7 @@ To run the Streamlit application, execute the following command:
 
 ```bash
 streamlit run app.py
+```
 
 # Choose Training Model
 
