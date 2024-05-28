@@ -32,7 +32,7 @@ streamlit run app.py
 
 # Choose Training Model
 
-There are 2 Models to embed this information in the training process, since not all organizations create/can create all 476 of these parts_ids:
+There are 2 ***Random Forest*** Models to embed this information in the training process, since not all organizations create/can create all 476 of these parts_ids:
 
 ### NegativeSampling Mode:
 - Augments the provided datasets by adding negative samples to help the model learn that not all part IDs get produced by each organization. This is done by introducing samples for part IDs that an organization does not produce (negative samples), while positive samples are given weights.
