@@ -1,15 +1,9 @@
 # ML_coding_challenge
 
-## Introduction
-Provide a brief introduction to your project and its objectives here.
-
 ## Environment Setup and Installation
 
 ### Requirements
 - Python 3.9
-
-### Setting Up Your Environment
-Follow these steps to set up your Python environment and run the project:
 
 # Clone the repository
 git clone https://github.com/Kimiaebra/ML_coding_challenge.git
