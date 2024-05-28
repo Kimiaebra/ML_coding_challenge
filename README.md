@@ -11,14 +11,13 @@ Provide a brief introduction to your project and its objectives here.
 ### Setting Up Your Environment
 Follow these steps to set up your Python environment and run the project:
 
-```bash
 # Clone the repository
 git clone https://github.com/Kimiaebra/ML_coding_challenge.git
 cd ML_coding_challenge
 
 # Create a Conda envirement
-conda creat -n [env_name] python=3.9
-conda activate ML_coding_challenge
+conda create -n [env_name] python=3.9
+conda activate [env_name]
 
 # Install the required packages
 pip install -r requirements.txt
