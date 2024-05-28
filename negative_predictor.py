@@ -189,7 +189,7 @@ def train_model(X_train,y_train, le_pid, le_org, vectorizer,n_estimators=100,sav
             'label_encoder_org': le_org,
             'vectorizer': vectorizer,
         }
-        joblib.dump(model_components, 'model_and_transformers.pkl',compress=6)
+        joblib.dump(model_components, 'model_and_transformers.pkl',compress=3)
 
     return clf
 
@@ -340,27 +340,26 @@ if __name__=='__main__':
     X,y,le_pid,le_org,vectorizer = prepare_data(DATA)
 
     # performs data split
-    # X_train, X_test, y_train, y_test = split_data(X, y, test_size=0.2) 
+    X_train, X_test, y_train, y_test = split_data(X, y, test_size=0.2) 
     
     # maps orgranization to part_ids which get produced in this organization 
-    X_train,y_train = X,y
     mapping=org2pid(X_train,y_train)
     
     # add negative class to trainig data
     X_train,y_train= add_negative_samples(X_train,y_train,mapping)
     
     # trains the model 
-    model= train_model(X_train, y_train, le_pid,le_org,vectorizer, save_model=True)
+    model= train_model(X_train, y_train, le_pid,le_org,vectorizer, save_model=False)
 
     # Start timing for inference
-    # start_time = time.time()
-    # num_test_items = X_test.shape[0]
-    # prediction,report = predict(model,X_test,y_test,le_pid)
-    # f1= evaluate_small_classes(report,2)
+    start_time = time.time()
+    num_test_items = X_test.shape[0]
+    prediction,report = predict(model,X_test,y_test,le_pid)
+    f1= evaluate_small_classes(report,2)
     # End timing for inference
-    # end_time = time.time()
-    # ml_inference_time = (end_time - start_time)/ num_test_items
-    # print(f"Machine Learning Inference Time: {ml_inference_time:.4f} seconds")
+    end_time = time.time()
+    ml_inference_time = (end_time - start_time)/ num_test_items
+    print(f"Machine Learning Inference Time: {ml_inference_time:.4f} seconds")
     
     
     
