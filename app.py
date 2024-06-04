@@ -9,9 +9,15 @@ from negative_predictor import add_negative_samples
 from negative_predictor import org2pid as neg_org2pid
 from negative_predictor import predict as neg_predict
 from negative_predictor import load_model_and_transformers as neg_load_model_and_transformers
+
+import numpy as np
+import sklearn 
+
+
+
 def run_prediction_with_filtering_feature(file, use_pretrained):
     data = pd.read_csv(file)
-    
+    target= np.array(data['part_id'])
     if use_pretrained:
         # Load pre-trained model and transformers
         model, vectorizer, le_pid, le_org, org_part_map = load_model_and_transformers('model_and_transformers.pkl')
@@ -27,14 +33,16 @@ def run_prediction_with_filtering_feature(file, use_pretrained):
     num_test_items = X_test.shape[0]
     start_time = time.time()
     predictions, report = predict(model, X_test, y_test, org_part_map, le_pid)
+    acc=sklearn.metrics.accuracy_score(target,predictions ,normalize=True, sample_weight=None)
     total_time = (time.time() - start_time)/ num_test_items
-    predictions = ['id_' + str(pred) for pred in predictions] if predictions is not None else []
+    
 
-    return predictions, total_time,report
+    return predictions, total_time,report,acc
+
 
 def run_prediction_with_negative_samples(file, use_pretrained):
     data = pd.read_csv(file)
-    
+    target= np.array(data['part_id'])
     if use_pretrained:
         # Load pre-trained model and transformers
         model, vectorizer, le_pid, le_org = neg_load_model_and_transformers('model_and_transformers_negative_sample.pkl')
@@ -51,10 +59,11 @@ def run_prediction_with_negative_samples(file, use_pretrained):
     num_test_items = X_test.shape[0]
     start_time = time.time()
     predictions, report = neg_predict(model, X_test, y_test, le_pid)
+    acc=sklearn.metrics.accuracy_score(target,predictions ,normalize=True, sample_weight=None)
     total_time = (time.time() - start_time)/ num_test_items
-    predictions = ['id_' + str(pred) for pred in predictions] if predictions is not None else []
+    
 
-    return predictions, total_time,report
+    return predictions, total_time,report,acc
 
 st.title("Part ID Prediction Tool")
 
@@ -85,11 +94,12 @@ if uploaded_file is not None:
     st.write("File uploaded successfully!")
     if st.button('Predict'):
         if method == "Feature Filtering":
-            predictions,total_time, report = run_prediction_with_filtering_feature(uploaded_file, mode == "Use Pretrained Model")
+            predictions,total_time, report,acc = run_prediction_with_filtering_feature(uploaded_file, mode == "Use Pretrained Model")
         else:
-            predictions,total_time, report = run_prediction_with_negative_samples(uploaded_file, mode == "Use Pretrained Model")
+            predictions,total_time, report,acc = run_prediction_with_negative_samples(uploaded_file, mode == "Use Pretrained Model")
 
-        st.write(f"Total time taken to predict for each row in average: {total_time:.4f} seconds")   
+        st.write(f"Total time taken to predict for each row in average: {total_time:.4f} seconds")  
+        st.write(f"Accuracy of prediction: {acc:.4f}")
         results_df = pd.DataFrame(predictions, columns=['Predictions'])
         st.write(results_df)
         csv = results_df.to_csv(index=False)

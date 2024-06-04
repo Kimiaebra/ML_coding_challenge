@@ -275,7 +275,7 @@ def predict(model,X_test,y_test,le_pid):
     # class_report = classification_report(y_test, max_indices, 
     #                                       target_names=le_pid.inverse_transform(range(len(le_pid.classes_))),output_dict=True)
     
-    return max_indices,None
+    return le_pid.inverse_transform(max_indices),None
     
 def load_model_and_transformers(filepath='model_and_transformers_binary.pkl'):
     components = joblib.load(filepath)

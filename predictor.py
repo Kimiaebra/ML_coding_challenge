@@ -252,16 +252,23 @@ def predict(model,X_test,y_test,org_part_map,le_pid):
         y_pred_constrained.append(constrained_part_id)
         
     y_pred_constrained = np.array(y_pred_constrained)
+    
 
     class_report_dict = classification_report(y_test, y_pred_constrained,  labels=all_labels,
                                           target_names=le_pid.inverse_transform(all_labels),output_dict=True)
     
     # class_report_dict = classification_report(y_test, y_pred_constrained,  labels=all_labels,
     #                                       target_names=le_pid.inverse_transform(all_labels))
-    # print("Classification Report:\n", class_report_dict)
-    # return y_pred_constrained,class_report
+    
+    # print("Classification Report first:\n", class_report_dict)
+    
+    
+    
+    
+    return le_pid.inverse_transform(y_pred_constrained),class_report_dict
 
-    return y_pred_constrained,class_report_dict
+
+
 
 def evaluate_small_classes(class_report,class_instances):
     # Convert the dictionary to a DataFrame. Exclude the summary rows if they exist.
